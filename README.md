@@ -43,4 +43,5 @@ Codex comprobó los cambios con `npm run lint`, `npm run build` y revisión de l
 1. **Guardar IDs para comparar.** Se guardan en estado dos identificadores, no dos objetos `Terremoto`. La alternativa era guardar los objetos completos, pero duplicaría información que ya existe en `terremotos` y podría quedar desactualizada si se repite la carga. El coste de esta decisión es buscar cada ID en la lista al renderizar.
 2. **Cancelar la petición al limpiar el efecto.** `AbortController` impide que una respuesta tardía actualice la interfaz tras desmontar o repetir la carga. La alternativa era hacer `fetch` sin limpieza: sería menos código, pero permitiría que una petición antigua compitiera con la nueva. `intento` cambia solo al pulsar «Reintentar» y es la dependencia del efecto.
 
-La defensa escrita debe explicar el código real: el README documenta las decisiones, pero no sustituye comprenderlas.
+
+
