@@ -8,6 +8,7 @@ interface ResultadosProps {
   terremotosFiltrados: Terremoto[]
   idsComparados: string[]
   onAlternarComparacion: (id: string) => void
+  onReintentar: () => void
 }
 
 function Resultados({
@@ -17,6 +18,7 @@ function Resultados({
   terremotosFiltrados,
   idsComparados,
   onAlternarComparacion,
+  onReintentar,
 }: ResultadosProps) {
   return (
     <section className="resultados" aria-labelledby="titulo-resultados">
@@ -25,9 +27,12 @@ function Resultados({
       {cargando && <p className="mensaje">Cargando terremotos...</p>}
 
       {error && (
-        <p className="mensaje mensaje-error" role="alert">
-          {error}
-        </p>
+        <div className="mensaje mensaje-error" role="alert">
+          <p>{error}</p>
+          <button type="button" onClick={onReintentar}>
+            Reintentar
+          </button>
+        </div>
       )}
 
       {!cargando && !error && terremotos.length === 0 && (

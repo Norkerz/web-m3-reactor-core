@@ -19,24 +19,31 @@ function App() {
   const [cargando, setCargando] = useState(true)
   const [error, setError] = useState('')
   const [idsComparados, setIdsComparados] = useState<string[]>([])
+  const [intento, setIntento] = useState(0)
 
   useEffect(() => {
+    const controlador = new AbortController()
+
     async function cargarTerremotos() {
       try {
-        const eventosApi = await obtenerTerremotos()
+        const eventosApi = await obtenerTerremotos(controlador.signal)
+        if (controlador.signal.aborted) return
         const terremotosPreparados = transformarTerremotos(eventosApi)
         setTerremotos(terremotosPreparados)
       } catch {
-        setError(
-          'No se pudieron cargar los terremotos. Comprueba tu conexión e inténtalo de nuevo.',
-        )
+        if (!controlador.signal.aborted) {
+          setError(
+            'No se pudieron cargar los terremotos. Comprueba tu conexión e inténtalo de nuevo.',
+          )
+        }
       } finally {
-        setCargando(false)
+        if (!controlador.signal.aborted) setCargando(false)
       }
     }
 
     cargarTerremotos()
-  }, [])
+    return () => controlador.abort()
+  }, [intento])
 
   const terremotosFiltrados = filtrarTerremotos(
     terremotos,
@@ -53,6 +60,14 @@ function App() {
   function limpiarFiltros() {
     setBusqueda('')
     setMagnitudMinima(0)
+  }
+
+  function reintentarCarga() {
+    setTerremotos([])
+    setIdsComparados([])
+    setError('')
+    setCargando(true)
+    setIntento((actual) => actual + 1)
   }
 
   function alternarComparacion(id: string) {
@@ -77,19 +92,22 @@ function App() {
       </header>
 
       <main>
-        <Resumen resumen={resumen} />
-        <Filtros
-          busqueda={busqueda}
-          magnitudMinima={magnitudMinima}
-          onCambiarBusqueda={setBusqueda}
-          onCambiarMagnitud={setMagnitudMinima}
-          onLimpiar={limpiarFiltros}
-        />
-
-        <Comparador
-          seleccionados={comparados}
-          onLimpiar={() => setIdsComparados([])}
-        />
+        {!cargando && !error && (
+          <>
+            <Resumen resumen={resumen} />
+            <Filtros
+              busqueda={busqueda}
+              magnitudMinima={magnitudMinima}
+              onCambiarBusqueda={setBusqueda}
+              onCambiarMagnitud={setMagnitudMinima}
+              onLimpiar={limpiarFiltros}
+            />
+            <Comparador
+              seleccionados={comparados}
+              onLimpiar={() => setIdsComparados([])}
+            />
+          </>
+        )}
 
         <Resultados
           cargando={cargando}
@@ -98,6 +116,7 @@ function App() {
           terremotosFiltrados={terremotosFiltrados}
           idsComparados={idsComparados}
           onAlternarComparacion={alternarComparacion}
+          onReintentar={reintentarCarga}
         />
       </main>
 

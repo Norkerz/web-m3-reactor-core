@@ -7,8 +7,8 @@ interface RespuestaApi {
   features: EventoApi[]
 }
 
-export async function obtenerTerremotos(): Promise<EventoApi[]> {
-  const respuesta = await fetch(URL_TERREMOTOS)
+export async function obtenerTerremotos(signal: AbortSignal): Promise<EventoApi[]> {
+  const respuesta = await fetch(URL_TERREMOTOS, { signal })
 
   if (!respuesta.ok) {
     throw new Error('La API ha respondido con un error.')
