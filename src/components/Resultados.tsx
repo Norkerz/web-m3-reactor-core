@@ -6,6 +6,8 @@ interface ResultadosProps {
   error: string
   terremotos: Terremoto[]
   terremotosFiltrados: Terremoto[]
+  idsComparados: string[]
+  onAlternarComparacion: (id: string) => void
 }
 
 function Resultados({
@@ -13,6 +15,8 @@ function Resultados({
   error,
   terremotos,
   terremotosFiltrados,
+  idsComparados,
+  onAlternarComparacion,
 }: ResultadosProps) {
   return (
     <section className="resultados" aria-labelledby="titulo-resultados">
@@ -44,7 +48,12 @@ function Resultados({
       {!cargando && !error && terremotosFiltrados.length > 0 && (
         <div className="lista-terremotos">
           {terremotosFiltrados.map((terremoto) => (
-            <TarjetaTerremoto key={terremoto.id} terremoto={terremoto} />
+            <TarjetaTerremoto
+              key={terremoto.id}
+              terremoto={terremoto}
+              comparado={idsComparados.includes(terremoto.id)}
+              onAlternarComparacion={onAlternarComparacion}
+            />
           ))}
         </div>
       )}

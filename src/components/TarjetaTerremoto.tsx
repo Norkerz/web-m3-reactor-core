@@ -2,6 +2,8 @@ import type { Terremoto } from '../utils/terremotos'
 
 interface TarjetaTerremotoProps {
   terremoto: Terremoto
+  comparado: boolean
+  onAlternarComparacion: (id: string) => void
 }
 
 function obtenerClaseNivel(nivel: string): string {
@@ -11,7 +13,11 @@ function obtenerClaseNivel(nivel: string): string {
   return 'nivel-muy-fuerte'
 }
 
-function TarjetaTerremoto({ terremoto }: TarjetaTerremotoProps) {
+function TarjetaTerremoto({
+  terremoto,
+  comparado,
+  onAlternarComparacion,
+}: TarjetaTerremotoProps) {
   return (
     <article className="tarjeta-terremoto">
       <div className="tarjeta-encabezado">
@@ -35,6 +41,15 @@ function TarjetaTerremoto({ terremoto }: TarjetaTerremotoProps) {
           <dd>{terremoto.profundidad.toFixed(1)} km</dd>
         </div>
       </dl>
+
+      <button
+        type="button"
+        className="boton-comparar"
+        aria-pressed={comparado}
+        onClick={() => onAlternarComparacion(terremoto.id)}
+      >
+        {comparado ? 'Quitar de comparación' : 'Añadir a comparación'}
+      </button>
 
       <a href={terremoto.enlace} target="_blank" rel="noreferrer">
         Ver evento en USGS
