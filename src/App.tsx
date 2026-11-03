@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import TarjetaTerremoto from './components/TarjetaTerremoto'
 import { obtenerTerremotos } from './services/api'
 import Resumen from './components/Resumen'
 import Filtros from './components/Filtros'
+import Resultados from './components/Resultados'
 
 import {
   calcularResumen,
@@ -67,43 +67,12 @@ function App() {
           onLimpiar={limpiarFiltros}
         />
 
-        <section className="resultados" aria-labelledby="titulo-resultados">
-          <h2 id="titulo-resultados">Terremotos recientes</h2>
-
-          {cargando && <p className="mensaje">Cargando terremotos...</p>}
-
-          {error && (
-            <p className="mensaje mensaje-error" role="alert">
-              {error}
-            </p>
-          )}
-
-          {!cargando && !error && terremotos.length === 0 && (
-            <p className="mensaje">
-              La API no ha devuelto terremotos en las últimas 24 horas.
-            </p>
-          )}
-
-          {!cargando &&
-            !error &&
-            terremotos.length > 0 &&
-            terremotosFiltrados.length === 0 && (
-              <p className="mensaje">
-                No hay terremotos que coincidan con los filtros.
-              </p>
-            )}
-
-          {!cargando && !error && terremotosFiltrados.length > 0 && (
-            <div className="lista-terremotos">
-              {terremotosFiltrados.map((terremoto) => (
-                <TarjetaTerremoto
-                  key={terremoto.id}
-                  terremoto={terremoto}
-                />
-              ))}
-            </div>
-          )}
-        </section>
+        <Resultados
+          cargando={cargando}
+          error={error}
+          terremotos={terremotos}
+          terremotosFiltrados={terremotosFiltrados}
+        />
       </main>
 
       <footer>
