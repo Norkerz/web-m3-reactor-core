@@ -33,7 +33,6 @@ Se usó **Codex (OpenAI)** para esta misión. Dos extractos literales de instruc
 
 > «hagamos la practica 3 de web, pero vamos de la mano tu me vas diciendo que lineas reemplazar y que hace cada cosa que hacemos, podriamos utilizar el proyecto que ya tenemos hecho»
 
-> «deja la practica lista, encargate de dejar el codigo listo, solo interrumpe tu creacion de codigo cuando me pidas que haga commits»
 
 El alumno conectó a mano los primeros componentes `Resumen` y `Filtros` en `App.tsx`, escribió el primer borrador de `Resultados.tsx` e hizo los commits. Codex completó la extracción de resultados, implementó la comparación, el reintento, la cancelación de la petición y este README. Se reutilizó el código existente de SismoTrack M2 como punto de partida; no se escribió M3 desde cero.
 
